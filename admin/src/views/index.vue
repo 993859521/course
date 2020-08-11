@@ -33,8 +33,17 @@
                         </div>
                     </li>
                     <li>
-                        <a href="#">
+                        <router-link to="/admin/welcome">
                             <i class="fa fa-home"></i>
+                            <span class="J_menuItem">欢迎</span>
+                        </router-link>
+
+
+
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa fa-bar-chart-o"></i>
                             <span class="nav-label">系统管理</span>
                             <span class="fa arrow"></span>
                         </a>
@@ -44,6 +53,23 @@
                             </li>
                             <li>
                                 <a class="J_menuItem" href="index_v2.html">权限管理</a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-desktop"></i>
+                            <span class="nav-label">业务管理</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <router-link to="/admin/business/chapter">
+                                <span class="J_menuItem">大章管理</span>
+                                </router-link>
+
                             </li>
 
                         </ul>
@@ -74,7 +100,7 @@
                                 <li class="m-t-xs">
                                     <div class="dropdown-messages-box">
                                         <a href="profile.html" class="pull-left">
-                                            <img alt="image" class="img-circle" src="img/a7.jpg">
+
                                         </a>
                                         <div class="media-body">
                                             <small class="pull-right">46小时前</small>
@@ -88,7 +114,7 @@
                                 <li>
                                     <div class="dropdown-messages-box">
                                         <a href="profile.html" class="pull-left">
-                                            <img alt="image" class="img-circle" src="img/a4.jpg">
+
                                         </a>
                                         <div class="media-body ">
                                             <small class="pull-right text-navy">25小时前</small>

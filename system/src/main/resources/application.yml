@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/course_center?serverTimezone=UTC&nullCatalogMeansCurrent=true"
+    hikari:
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: system
+server:
+  port: 9002
