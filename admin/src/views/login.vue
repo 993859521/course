@@ -15,7 +15,7 @@
         <div class="form-group">
           <input type="password" class="form-control" placeholder="密码" required="">
         </div>
-        <router-link to="/admin/welcome">
+        <router-link to="/welcome">
           <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
         </router-link>
 

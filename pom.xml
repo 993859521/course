@@ -8,6 +8,7 @@
         <module>system</module>
         <module>service</module>
         <module>business</module>
+        <module>generator</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -31,6 +32,13 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
             <version> 2.2.1.RELEASE</version>
         </dependency>
+        <!-- 模板引擎freemarker -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.30</version>
+        </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>

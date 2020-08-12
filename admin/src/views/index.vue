@@ -33,7 +33,7 @@
                         </div>
                     </li>
                     <li>
-                        <router-link to="/admin/welcome">
+                        <router-link to="/welcome">
                             <i class="fa fa-home"></i>
                             <span class="J_menuItem">欢迎</span>
                         </router-link>
@@ -66,8 +66,20 @@
                         </a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <router-link to="/admin/business/chapter">
+                                <router-link to="/business/chapter">
                                 <span class="J_menuItem">大章管理</span>
+                                </router-link>
+
+                            </li>
+                            <li>
+                                <router-link to="/business/course">
+                                    <span class="J_menuItem">课程管理</span>
+                                </router-link>
+
+                            </li>
+                            <li>
+                                <router-link to="/business/section">
+                                    <span class="J_menuItem">小节管理</span>
                                 </router-link>
 
                             </li>

@@ -11,7 +11,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @ComponentScan("com.course")
-@MapperScan("com.course.service.dao")
+@MapperScan("com.course.service.dto")
 
 public class BusinessApplication {
 

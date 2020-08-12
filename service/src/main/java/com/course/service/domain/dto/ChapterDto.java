@@ -1,4 +1,4 @@
-package com.course.service.domain.dao;
+package com.course.service.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

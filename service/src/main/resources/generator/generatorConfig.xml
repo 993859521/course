@@ -25,15 +25,15 @@
         <javaModelGenerator targetPackage="com.course.service.domain.entity.${model_name}"
                             targetProject="src/main/java"/>
 
-        <sqlMapGenerator targetPackage="com.course.service.dao.${model_name}"
+        <sqlMapGenerator targetPackage="com.course.service.dto.${model_name}"
                          targetProject="src/main/resources"/>
 
-        <javaClientGenerator targetPackage="com.course.service.dao.${model_name}"
+        <javaClientGenerator targetPackage="com.course.service.dto.${model_name}"
                              targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
         <table tableName="${table_name}">
-            <generatedKey column="id" sqlStatement="JDBC"/>
+            <generatedKey column="id" sqlStatement="JDBC" />
         </table>
     </context>
 </generatorConfiguration>
