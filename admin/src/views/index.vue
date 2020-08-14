@@ -66,11 +66,12 @@
                         </a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <router-link to="/business/chapter">
-                                <span class="J_menuItem">大章管理</span>
+                                <router-link to="/business/category">
+                                    <span class="J_menuItem">分类管理</span>
                                 </router-link>
 
                             </li>
+
                             <li>
                                 <router-link to="/business/course">
                                     <span class="J_menuItem">课程管理</span>
@@ -78,11 +79,13 @@
 
                             </li>
                             <li>
-                                <router-link to="/business/section">
-                                    <span class="J_menuItem">小节管理</span>
+                                <router-link to="/business/teacher">
+                                    <span class="J_menuItem">教师管理</span>
                                 </router-link>
 
                             </li>
+
+
 
                         </ul>
 

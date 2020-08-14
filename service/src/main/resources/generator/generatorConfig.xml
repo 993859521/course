@@ -22,13 +22,13 @@
 
         </jdbcConnection>
 
-        <javaModelGenerator targetPackage="com.course.service.domain.entity.${model_name}"
+        <javaModelGenerator targetPackage="com.course.service.domain.entity"
                             targetProject="src/main/java"/>
 
-        <sqlMapGenerator targetPackage="com.course.service.dto.${model_name}"
+        <sqlMapGenerator targetPackage="com.course.service.dto"
                          targetProject="src/main/resources"/>
 
-        <javaClientGenerator targetPackage="com.course.service.dto.${model_name}"
+        <javaClientGenerator targetPackage="com.course.service.dto"
                              targetProject="src/main/java"
                              type="XMLMAPPER"/>
 

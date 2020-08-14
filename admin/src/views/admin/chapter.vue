@@ -1,7 +1,15 @@
 <template>
         <div class="ibox float-e-margins">
             <div class="ibox-content">
+                <h4 class="lighter">
+                    <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
+                    <router-link to="/business/course" class="pink"> {{course.name}} </router-link>
+                </h4>
+                <hr>
                 <p>
+                <router-link to="/business/course" class="btn btn-white btn-default btn-round">
+                    返回课程
+                </router-link>
                     <button v-on:click="add()" class="btn btn-white btn-default btn-round">
                         <i class="ace-icon fa fa-edit"></i>
                         新增
@@ -29,14 +37,16 @@
                         <td>{{chapter.courseId}}</td>
                         <td>
                             <div class="hidden-sm hidden-xs btn-group">
-                            <button v-on:click="edit(chapter)" class="btn btn-xs btn-info">
-                            <i class="ace-icon fa fa-pencil bigger-120"></i>
-                            </button>
-
-                            <button v-on:click="del(chapter.id)" class="btn btn-xs btn-danger">
-                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                            </button>
-                        </div></td>
+                                <button v-on:click="toSection(chapter)" class="btn btn-white btn-xs btn-info btn-round">
+                                    小节
+                                </button>&nbsp;
+                                <button v-on:click="edit(chapter)" class="btn btn-white btn-xs btn-info btn-round">
+                                    编辑
+                                </button>&nbsp;
+                                <button v-on:click="del(chapter.id)" class="btn btn-white btn-xs btn-warning btn-round">
+                                    删除
+                                </button>
+                            </div></td>
                     </tr>
                     </tbody>
                 </table>
@@ -53,12 +63,6 @@
                                         <label class="col-sm-2 control-label">名称</label>
                                         <div class="col-sm-10">
                                             <input v-model="chapter.name" class="form-control" placeholder="名称">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">课程ID</label>
-                                        <div class="col-sm-10">
-                                            <input v-model="chapter.courseId" class="form-control" placeholder="名称">
                                         </div>
                                     </div>
                                 </form>
@@ -83,12 +87,20 @@
         data:function(){
             return{
                 chapter:{},
-                chapters:[]
+                chapters:[],
+                course: {},
             }
 
         },
         mounted() {
-            let _this=this; _this.$refs.pagination.size = 5;
+
+            let _this=this;
+            _this.$refs.pagination.size = 5;
+            let course = SessionStorage.get(SESSION_KEY_COURSE) || {};
+            if (Tool.isEmpty(course)) {
+                _this.$router.push("/welcome");
+            }
+            _this.course = course;
             this.list(1);
         },
         methods:{
@@ -107,10 +119,10 @@
 
                 // 保存校验
                 if (!Validator.require(_this.chapter.name, "名称")
-                    || !Validator.require(_this.chapter.courseId, "名称")
                     || !Validator.length(_this.chapter.courseId, "课程ID", 1, 8)) {
                     return;
                 }
+                _this.chapter.courseId = _this.course.id;
 
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/chapter/save/', _this.chapter).then((response)=>{
@@ -149,6 +161,7 @@
                 _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/chapter/list',{
                         page: page,
                         size: _this.$refs.pagination.size,
+                        courseId: _this.course.id
                 }
             ).then((response)=>{
                     let resp = response.data.content;
@@ -156,6 +169,11 @@
                     _this.$refs.pagination.render(page, resp.total);
                 });
 
+            },
+            toSection(chapter) {
+                let _this = this;
+                SessionStorage.set(SESSION_KEY_CHAPTER, chapter);
+                _this.$router.push("/business/section");
             }
         }
     }

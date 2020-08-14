@@ -1,5 +1,6 @@
 package com.course.service.domain.dto;
 
+import com.course.service.domain.entity.CourseContent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +31,7 @@ public class ResponseDto<T> {
      * 返回泛型数据，自定义类型
      */
     private T content;
+
 
 
     @Override

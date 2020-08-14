@@ -3,9 +3,7 @@ package com.course.generator.server;
 import com.course.generator.util.DbUtil;
 import com.course.generator.util.Field;
 import com.course.generator.util.FreemarkerUtil;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
+
 
 import java.io.File;
 import java.util.*;
@@ -21,8 +19,8 @@ public class ServerGenerator {
         String module = MODULE;
 
 
-        String Domain = "Section";
-        String tableName = "section";
+        String Domain = "Teacher";
+        String tableName = "teacher";
         String tableNameCn = DbUtil.getTableComment(tableName);
         String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
         System.out.println("表："+tableName);

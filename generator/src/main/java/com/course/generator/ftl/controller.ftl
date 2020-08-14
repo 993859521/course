@@ -37,7 +37,6 @@ public class ${Domain}Controller {
             <#list fieldList as field>
                 <#if field.name!="id" && field.nameHump!="createdAt" && field.nameHump!="updatedAt" && field.nameHump!="sort">
                     <#if !field.nullAble>
-         ValidatorUtil.require(courseDto.getName(), "名称");
          ValidatorUtil.require(${domain}Dto.get${field.nameBigHump}(), "${field.nameCn}");
                 </#if>
         <#if (field.length > 0)>

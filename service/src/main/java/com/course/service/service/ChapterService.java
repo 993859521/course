@@ -1,8 +1,12 @@
 package com.course.service.service;
+import com.course.service.domain.entity.Course;
+import com.course.service.domain.entity.Section;
 import com.course.service.dto.ChapterMapper;
 import com.course.service.domain.dto.ChapterDto;
 import com.course.service.domain.dto.PageDto;
 import com.course.service.domain.entity.Chapter;
+import com.course.service.dto.CourseMapper;
+import com.course.service.dto.SectionMapper;
 import com.course.service.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -21,6 +25,8 @@ import static com.course.service.util.UuidUtil.getShortUuid;
 @RequiredArgsConstructor( onConstructor = @__(@Autowired))
 public class ChapterService {
     private final ChapterMapper chapterMapper;
+    private final SectionMapper sectionMapper;
+    private final CourseService courseService;
     /**
      * 列表查询
      * @param pageDto
@@ -29,7 +35,7 @@ public class ChapterService {
     public PageDto selectAll(PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
         List<ChapterDto> chapterDtos = new ArrayList<ChapterDto>();
-        List<Chapter> chapters = chapterMapper.selectAll();
+        List<Chapter> chapters = chapterMapper.select(Chapter.builder().courseId(pageDto.getCourseId()).build());
         PageInfo pageInfo = new PageInfo<>(chapters);
         pageDto.setTotal(pageInfo.getTotal());
         for (int i = 0; i < chapters.size(); i++) {
@@ -62,7 +68,16 @@ public class ChapterService {
      * @param id
      */
     public void delete(String id){
+        Chapter chapter = chapterMapper.selectByPrimaryKey(id);
+
+        List<Section> select = sectionMapper.select(Section.builder().chapterId(chapter.getId()).build());
+        for (Section item:select
+             ) {
+            courseService.del_time(chapter.getCourseId(),item.getTime());
+            sectionMapper.delete(item);
+        }
         chapterMapper.deleteByPrimaryKey(id);
     }
+
 
 }

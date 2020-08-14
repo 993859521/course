@@ -29,6 +29,8 @@ public class PageDto<T> {
     protected long total;
 
     protected List<T> list;
+    protected String courseId;
+    protected String chapterId;
 
 
     @Override
