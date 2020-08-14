@@ -31,6 +31,7 @@ public class ResponseDto<T> {
      * 返回泛型数据，自定义类型
      */
     private T content;
+    private CourseContentFileDto list;
 
 
 

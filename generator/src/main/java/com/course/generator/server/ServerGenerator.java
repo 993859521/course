@@ -19,8 +19,8 @@ public class ServerGenerator {
         String module = MODULE;
 
 
-        String Domain = "Teacher";
-        String tableName = "teacher";
+        String Domain = "CourseContentFile";
+        String tableName = "course_content_file";
         String tableNameCn = DbUtil.getTableComment(tableName);
         String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
         System.out.println("表："+tableName);

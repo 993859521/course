@@ -90,6 +90,22 @@
                         </ul>
 
                     </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-desktop"></i>
+                            <span class="nav-label">文件管理</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <router-link to="/business/file">
+                                    <span class="J_menuItem">文件管理</span>
+                                </router-link>
+
+                            </li>
+
+                        </ul>
+                    </li>
 
                 </ul>
             </div>
