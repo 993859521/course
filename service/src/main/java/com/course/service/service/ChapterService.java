@@ -1,4 +1,5 @@
 package com.course.service.service;
+import com.course.service.domain.dto.CourseDto;
 import com.course.service.domain.entity.Course;
 import com.course.service.domain.entity.Section;
 import com.course.service.dto.ChapterMapper;
@@ -47,6 +48,8 @@ public class ChapterService {
         pageDto.setList(chapterDtos);
         return pageDto;
     }
+
+
 
     /**
      * 增加数据或者更新数据

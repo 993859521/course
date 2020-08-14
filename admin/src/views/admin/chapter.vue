@@ -65,6 +65,14 @@
                                             <input v-model="chapter.name" class="form-control" placeholder="名称">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">讲师</label>
+                                        <div class="col-sm-10">
+                                            <select v-model="chapter.teacherId" class="form-control">
+                                                <option v-for="o in teachers" v-bind:value="o.id">{{o.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -89,6 +97,7 @@
                 chapter:{},
                 chapters:[],
                 course: {},
+                teachers: [],
             }
 
         },
@@ -100,6 +109,7 @@
             if (Tool.isEmpty(course)) {
                 _this.$router.push("/welcome");
             }
+            _this.allTeacher();
             _this.course = course;
             this.list(1);
         },
@@ -174,7 +184,16 @@
                 let _this = this;
                 SessionStorage.set(SESSION_KEY_CHAPTER, chapter);
                 _this.$router.push("/business/section");
-            }
+            },
+            allTeacher() {
+                let _this = this;
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/teacher/all').then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    _this.teachers = resp.content;
+                })
+            },
         }
     }
 

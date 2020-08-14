@@ -33,4 +33,5 @@ public class ChapterDto {
      * 名称
      */
     private String name;
+    private String teacherId;
 }
