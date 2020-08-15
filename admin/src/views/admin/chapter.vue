@@ -128,7 +128,8 @@
                 let _this = this;
 
                 // 保存校验
-                if (!Validator.require(_this.chapter.name, "名称")
+                if (!Validator.require(_this.chapter.name, "名称")||
+                    !Validator.require(_this.chapter.teacherId, "老师")
                     || !Validator.length(_this.chapter.courseId, "课程ID", 1, 8)) {
                     return;
                 }
