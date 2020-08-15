@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.service.dto.CourseMapper">
+  <resultMap id="BaseResultMap" type="com.course.service.domain.entity.Course">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="time" jdbcType="INTEGER" property="time" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="level" jdbcType="CHAR" property="level" />
+    <result column="charge" jdbcType="CHAR" property="charge" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="enroll" jdbcType="INTEGER" property="enroll" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+  </resultMap>
+</mapper>
