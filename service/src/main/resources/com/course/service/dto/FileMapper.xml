@@ -10,8 +10,13 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="suffix" jdbcType="VARCHAR" property="suffix" />
     <result column="size" jdbcType="INTEGER" property="size" />
-    <result column="use" jdbcType="CHAR" property="use" />
+    <result column="use_enum" jdbcType="CHAR" property="useEnum" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="shard_index" jdbcType="INTEGER" property="shardIndex" />
+    <result column="shard_size" jdbcType="INTEGER" property="shardSize" />
+    <result column="shard_total" jdbcType="INTEGER" property="shardTotal" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="vod" jdbcType="CHAR" property="vod" />
   </resultMap>
 </mapper>

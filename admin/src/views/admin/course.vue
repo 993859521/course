@@ -36,7 +36,8 @@
                             <h3 class="search-title">
                                 <a href="#" class="blue">{{course.name}}</a>
                             </h3>
-                            <div v-for="teacher in course.teacher" v-bind:title="teacher.intro" >
+                            <div v-if="course.teacher">
+                            <div  v-for="teacher in course.teacher" v-bind:title="teacher.intro">
                                 <div>
                                     <img  style="width: 15%;height: 15%" class=" pull-left img-circle img-responsive mg-thumbnail" v-show="teacher.image" v-bind:src="teacher.image" >
                                 <div >
@@ -44,8 +45,21 @@
                                     <p class="m-b-xs">
                                         {{teacher.position}}
                                     </p>
+                                </div>
+                                </div>
 
                                 </div>
+                                <div class="col-sm-10">
+                                    <file v-bind:input-id="'image-upload'"
+                                          v-bind:text="'上传封面'"
+                                          v-bind:suffixs="['jpg', 'jpeg', 'png']"
+                                          v-bind:use="FILE_USE.COURSE.key"
+                                          v-bind:after-upload="afterUpload"></file>
+                                    <div v-show="course.image" class="row">
+                                        <div class="col-md-6">
+                                            <img v-bind:src="course.image" class="img-responsive">
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -454,8 +468,8 @@
             },
             afterUpload(resp) {
                 let _this = this;
-                let image = resp.content;
-                _this.course.image = process.env.VUE_APP_SERVER_FILE + "/static/file" + image;
+                let image = resp.content.path;
+                _this.course.image = process.env.VUE_APP_SERVER_FILE + "/static/file/" + image;
 
                 console.log(process.env.VUE_APP_SERVER_FILE + "/static/file" + image);
             },

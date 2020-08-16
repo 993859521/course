@@ -1,14 +1,15 @@
 package com.course.business.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.course.service.domain.dto.CourseContentFileDto;
 import com.course.service.domain.dto.FileDto;
 import com.course.service.domain.dto.PageDto;
 import com.course.service.domain.dto.ResponseDto;
 
-
 import com.course.service.enums.FileUseEnum;
 import com.course.service.service.FileService;
+import com.course.service.util.Base64ToMultipartFile;
 import com.course.service.util.UuidUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -25,51 +29,117 @@ import java.io.File;
 public class FileController {
     public static final String BUSINESS_NAME = "文件";
     @Resource
-    private FileService  fileService;
+    private FileService fileService;
     @Value("${file.path}")
     private String FILE_PATH;
 
     /***
-    * 列表查询
-    * @param pageDto
-    * @return
-    */
+     * 列表查询
+     * @param pageDto
+     * @return
+     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto){
-        return ResponseDto.builder().success(true).content( fileService.selectAll(pageDto)).build();
+    public ResponseDto list(@RequestBody PageDto pageDto) {
+        return ResponseDto.builder().success(true).content(fileService.selectAll(pageDto)).build();
     }
 
 
-
     @RequestMapping("/upload")
-    public ResponseDto upload(@RequestParam MultipartFile file,String use) throws Exception {
+    public ResponseDto upload(@RequestBody FileDto fileDto) throws Exception {
+        String use = fileDto.getUseEnum();
+        String key = fileDto.getKey_md5();
+        String suffix = fileDto.getSuffix();
+        String shardBase64 = fileDto.getShard();
+        MultipartFile shard = Base64ToMultipartFile.base64ToMultipart(shardBase64);
         log.info("上传文件开始");
-        FileUseEnum useEnum=FileUseEnum.getByCode(use);
-        String key = UuidUtil.getShortUuid();
-        String filename=file.getOriginalFilename();
-        String suffix = filename.substring(filename.lastIndexOf(".")+1);
+        FileUseEnum useEnum = FileUseEnum.getByCode(use);
         //如果文件夹不存在则创建
         String dir = useEnum.name().toLowerCase();
         File fullDir = new File(FILE_PATH + dir);
         if (!fullDir.exists()) {
             fullDir.mkdir();
         }
-        String path = dir + File.separator + key + "." + suffix ;
-        String fllPath=FILE_PATH+path;
-        File dest=new File(fllPath);
-        file.transferTo(dest);
+        String path = new StringBuffer(dir)
+                .append(File.separator)
+                .append(key)
+                .append(".")
+                .append(suffix)
+                .toString(); // course\6sfSqfOwzmik4A4icMYuUe.mp4
+        String localPath = new StringBuffer(path)
+                .append(".")
+                .append(fileDto.getShardIndex())
+                .toString(); // course\6sfSqfOwzmik4A4icMYuUe.mp4.1
+        String fullPath = FILE_PATH + localPath;
+        File dest = new File(fullPath);
+        shard.transferTo(dest);
         log.info("保存文件记录");
         ResponseDto responseDto = new ResponseDto();
-        FileDto fileDto=new FileDto();
         fileDto.setPath(path);
-        fileDto.setSuffix(suffix);
-        fileDto.setName(filename);
-        fileDto.setUse_enum(use);
-        fileDto.setSize(Math.toIntExact(file.getSize()));
-        responseDto.setContent("\\"+path);
+        responseDto.setContent("\\" + path);
+
         fileService.save(fileDto);
-        responseDto.setList(CourseContentFileDto.builder().courseId(UuidUtil.getShortUuid()).url("\\"+path).name(filename).size(Math.toIntExact(file.getSize())).build());
+        responseDto.setContent(fileDto);
+
+        if (fileDto.getShardIndex().equals(fileDto.getShardTotal())) {
+            this.merge(fileDto);
+        }
         return responseDto;
     }
 
+    public void merge(FileDto fileDto) throws Exception {
+        log.info("合并分片开始ShardIndex{},ShardTotal{}",fileDto.getShardIndex(),fileDto.getShardTotal());
+        String path = fileDto.getPath(); //http://127.0.0.1:9000/file/f/course\6sfSqfOwzmik4A4icMYuUe.mp4
+        path = path.replace(FILE_PATH, ""); //course\6sfSqfOwzmik4A4icMYuUe.mp4
+        Integer shardTotal = fileDto.getShardTotal();
+        File newFile = new File(FILE_PATH + path);
+        FileOutputStream outputStream = new FileOutputStream(newFile, true);//文件追加写入
+        FileInputStream fileInputStream = null;//分片文件
+        byte[] byt = new byte[10 * 1024 * 1024];
+        int len;
+
+        try {
+            for (int i = 0; i < shardTotal; i++) {
+                // 读取第i个分片
+                fileInputStream = new FileInputStream(new File(FILE_PATH + path + "." + (i + 1))); //  course\6sfSqfOwzmik4A4icMYuUe.mp4.1
+                while ((len = fileInputStream.read(byt)) != -1) {
+                    outputStream.write(byt, 0, len);
+                }
+            }
+        } catch (IOException e) {
+            log.error("分片合并异常", e);
+        } finally {
+            try {
+                if (fileInputStream != null) {
+                    fileInputStream.close();
+                }
+                outputStream.close();
+                log.info("IO流关闭");
+            } catch (Exception e) {
+                log.error("IO流关闭", e);
+            }
+        }
+        log.info("合并分片结束");
+
+        System.gc();
+        Thread.sleep(100);
+
+        // 删除分片
+        log.info("删除分片开始");
+        for (int i = 0; i < shardTotal; i++) {
+            String filePath = FILE_PATH + path + "." + (i+1) ;
+            File file = new File(filePath);
+            boolean result = file.delete();
+            log.info("删除{}，{}", filePath, result ? "成功" : "失败");
+        }
+        log.info("删除分片结束");
+    }
+
+    @GetMapping("/check/{key}")
+    public ResponseDto check(@PathVariable String key) throws Exception {
+        log.info("检查上传分片开始：{}", key);
+        ResponseDto responseDto = new ResponseDto();
+        FileDto fileDto = fileService.findByKey(key);
+        responseDto.setContent(fileDto);
+        return responseDto;
+    }
 }

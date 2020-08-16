@@ -209,8 +209,8 @@
             },
             afterUpload(resp) {
                 let _this = this;
-                let image = resp.content;
-                _this.teacher.image = process.env.VUE_APP_SERVER_FILE+"/static/file"+image;
+                let image = resp.content.path;
+                _this.teacher.image = process.env.VUE_APP_SERVER_FILE+"/static/file/"+image;
                 console.log(process.env.VUE_APP_SERVER_FILE+"/static/file"+image);
             },
         }

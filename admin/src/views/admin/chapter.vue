@@ -26,6 +26,7 @@
                     <tr>
                         <th>ID</th>
                         <th>课程</th>
+                        <th>讲师</th>
                         <th>课程ID</th>
                         <th>操作</th>
                     </tr>
@@ -34,19 +35,27 @@
                     <tr v-for="chapter in chapters">
                         <td>{{chapter.id}}</td>
                         <td>{{chapter.name}}</td>
+                        <td>
+                            <div v-for="teacher in teachers.filter(t=>{return t.id===chapter.teacherId})" >
+                                {{teacher.name}}
+                            </div>
+                        </td>
                         <td>{{chapter.courseId}}</td>
                         <td>
-                            <div class="hidden-sm hidden-xs btn-group">
-                                <button v-on:click="toSection(chapter)" class="btn btn-white btn-xs btn-info btn-round">
+                            <div class="btn-group">
+                                <button v-on:click="toSection(chapter)" class="btn btn-primary btn-sm btn-rounded">
                                     小节
                                 </button>&nbsp;
-                                <button v-on:click="edit(chapter)" class="btn btn-white btn-xs btn-info btn-round">
+                                <button v-on:click="edit(chapter)" class="btn btn-success btn-sm btn-rounded">
                                     编辑
                                 </button>&nbsp;
-                                <button v-on:click="del(chapter.id)" class="btn btn-white btn-xs btn-warning btn-round">
+                                <button v-on:click="del(chapter.id)" class="btn btn-danger btn-sm btn-rounded">
                                     删除
                                 </button>
-                            </div></td>
+                            </div>
+
+                        </td>
+
                     </tr>
                     </tbody>
                 </table>

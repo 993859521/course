@@ -44,7 +44,8 @@ public class File {
     /**
      * 用途|枚举[FileUseEnum]：COURSE("C", "讲师"), TEACHER("T", "课程")
      */
-    private String use_enum;
+    @Column(name = "use_enum")
+    private String useEnum;
 
     /**
      * 创建时间
@@ -57,4 +58,32 @@ public class File {
      */
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    /**
+     * 已上传分片
+     */
+    @Column(name = "shard_index")
+    private Integer shardIndex;
+
+    /**
+     * 分片大小|B
+     */
+    @Column(name = "shard_size")
+    private Integer shardSize;
+
+    /**
+     * 分片总数
+     */
+    @Column(name = "shard_total")
+    private Integer shardTotal;
+
+    /**
+     * 文件标识
+     */
+    private String key_md5;
+
+    /**
+     * vod|阿里云vod
+     */
+    private String vod;
 }

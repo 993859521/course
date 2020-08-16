@@ -238,10 +238,14 @@
             },
             afterUpload(resp) {
                 let _this = this;
-                let video = process.env.VUE_APP_SERVER_FILE+"/static/file"+resp.content;
+                let video = process.env.VUE_APP_SERVER_FILE+'/static/file/'+resp.content.path;
+                console.log(video);
+
+                _this.setion_video = video;
                 _this.section.video = video;
-                _this.setion_video=video;
+
                 _this.getTime();
+
             },
             /**
              * 获取时长
