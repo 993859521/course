@@ -6,11 +6,11 @@
     </h4>
     <hr>
 
-    <file v-bind:input-id="'content-file-upload'"
+    <Oss v-bind:input-id="'content-file-upload'"
           v-bind:text="'上传文件'"
           v-bind:suffixs="['jpg', 'jpeg', 'png', 'mp4']"
           v-bind:use="FILE_USE.COURSE.key"
-          v-bind:after-upload="afterUploadContentFile"></file>
+          v-bind:after-upload="afterUploadContentFile"></Oss>
     <br>
     <table id="file-table" class="table  table-bordered table-hover">
         <thead>
@@ -68,9 +68,10 @@
 </template>
 
 <script>
-    import File from "../../components/file";
+
+    import Oss from "../../components/oss";
     export default {
-        components: {File},
+        components: {Oss},
         name: "business-content",
 
         data: function() {
@@ -137,6 +138,7 @@
                 }).then((response)=>{
                     Loading.hide();
                     let resp = response.data;
+                    console.log(resp);
                     if (resp.success) {
                         // Toast.success("内容保存成功");
                         // let now = Tool.dateFormat("yyyy-MM-dd hh:mm:ss");
@@ -167,10 +169,16 @@
             afterUploadContentFile(response) {
                 let _this = this;
                 console.log("开始保存文件记录");
-                let file = response.list;
+                let file = response.content;
                 file.courseId = _this.course.id;
-                file.url =process.env.VUE_APP_SERVER_FILE+"/static/file"+file.url;
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course-content-file/save', file).then((response)=>{
+                console.log(file);
+                file.url =file.path;
+                let course_content_file={};
+                course_content_file.courseId=_this.course.id;
+                course_content_file.url= file.url;
+                course_content_file.name= file.name;
+                course_content_file.size= file.size;
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course-content-file/save', course_content_file).then((response)=>{
                     let resp = response.data;
                     if (resp.success) {
                         Toast.success("上传文件成功");

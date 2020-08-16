@@ -29,7 +29,7 @@
                         <td>{{file.name}}</td>
                         <td>{{file.suffix}}</td>
                         <td>{{file.size}}</td>
-                        <td>{{FILE_USE | optionKV(file.use_enum)}}</td>
+                        <td>{{FILE_USE | optionKV(file.useEnum)}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -46,7 +46,7 @@
             return{
                  file:{},
                  files:[],
-                 FILE_USE: FILE_USE,
+                FILE_USE: FILE_USE,
             }
 
         },

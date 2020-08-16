@@ -2,6 +2,9 @@ package com.course.business.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.model.PutObjectRequest;
 import com.course.service.domain.dto.CourseContentFileDto;
 import com.course.service.domain.dto.FileDto;
 import com.course.service.domain.dto.PageDto;
@@ -17,10 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 @Slf4j
 @RestController
@@ -28,6 +28,20 @@ import java.io.IOException;
 
 public class FileController {
     public static final String BUSINESS_NAME = "文件";
+    @Value("${oss.accessKeyId}")
+    private String accessKeyId;
+
+    @Value("${oss.accessKeySecret}")
+    private String accessKeySecret;
+
+    @Value("${oss.endpoint}")
+    private String endpoint;
+
+    @Value("${oss.bucket}")
+    private String bucket;
+
+    @Value("${oss.domain}")
+    private String ossDomain;
     @Resource
     private FileService fileService;
     @Value("${file.path}")
@@ -142,4 +156,41 @@ public class FileController {
         responseDto.setContent(fileDto);
         return responseDto;
     }
+    @PostMapping("/oss-simple")
+    public ResponseDto fileUpload(@RequestParam MultipartFile file, String use, String key_md5,String size) throws Exception {
+        log.info("上传文件开始");
+        FileUseEnum useEnum = FileUseEnum.getByCode(use);
+        String key = UuidUtil.getShortUuid();
+        String fileName = file.getOriginalFilename();
+        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        String dir = useEnum.name().toLowerCase();
+        String path = dir + "/" + key + "." + suffix;
+        log.info("1:{},2:{},3:{}",endpoint, accessKeyId, accessKeySecret);
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+
+
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, path, new ByteArrayInputStream(file.getBytes()));
+
+
+        ossClient.putObject(putObjectRequest);
+
+
+        ResponseDto responseDto = new ResponseDto();
+        FileDto fileDto = new FileDto();
+        fileDto.setPath(ossDomain + path);
+        fileDto.setName(fileName);
+        fileDto.setSize(Integer.parseInt(size));
+        responseDto.setContent(fileDto);
+        fileService.save(FileDto.builder()
+                .key_md5(key_md5)
+                .name(fileName)
+                .path(ossDomain + path)
+                .suffix(suffix)
+                .useEnum(use)
+                .size(Integer.parseInt(size))
+                .build());
+
+        return responseDto;
+    }
+
 }

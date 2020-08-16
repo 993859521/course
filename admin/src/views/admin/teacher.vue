@@ -74,11 +74,11 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">头像</label>
                                                     <div class="col-sm-10">
-                                                        <file v-bind:input-id="'image-upload'"
+                                                        <Oss v-bind:input-id="'image-upload'"
                                                                   v-bind:text="'上传头像'"
                                                                   v-bind:suffixs="['jpg', 'jpeg', 'png']"
                                                                   v-bind:use="FILE_USE.TEACHER.key"
-                                                                  v-bind:after-upload="afterUpload"></file>
+                                                                  v-bind:after-upload="afterUpload"></Oss>
                                                         <div v-show="teacher.image" class="row">
                                                             <div class="col-md-4">
                                                                 <img v-bind:src="teacher.image" class="img-responsive">
@@ -120,9 +120,11 @@
 
 <script>
     import Pagination from "../../components/pagination";
-    import File from "../../components/file";
+    import Oss from "../../components/oss";
+
+
     export default {
-        components: {Pagination,File},
+        components: {Pagination,Oss},
         name: "business-Teacher",
         data:function(){
             return{
@@ -210,8 +212,8 @@
             afterUpload(resp) {
                 let _this = this;
                 let image = resp.content.path;
-                _this.teacher.image = process.env.VUE_APP_SERVER_FILE+"/static/file/"+image;
-                console.log(process.env.VUE_APP_SERVER_FILE+"/static/file"+image);
+                _this.teacher.image =image;
+                console.log(image);
             },
         }
 

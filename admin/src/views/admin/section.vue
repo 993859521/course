@@ -88,11 +88,11 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label">视频</label>
                                                     <div class="col-sm-10">
-                                                        <file v-bind:input-id="'video-upload'"
+                                                        <Oss v-bind:input-id="'video-upload'"
                                                              v-bind:text="'上传VOD'"
                                                              v-bind:suffixs="['mp4']"
                                                              v-bind:use="FILE_USE.COURSE.key"
-                                                             v-bind:after-upload="afterUpload"></file>
+                                                             v-bind:after-upload="afterUpload"></Oss>
                                                         <div v-show="setion_video" class="row">
                                                             <div class="col-md-9">
                                                                 <video v-bind:src="setion_video" id="video" controls="controls" ></video>
@@ -136,10 +136,11 @@
 
 <script>
     import Pagination from "../../components/pagination";
-    import File from "../../components/file";
+
+    import Oss from "../../components/oss";
 
     export default {
-        components: {Pagination,File},
+        components: {Pagination,Oss},
         name: "business-Section",
         data:function(){
             return{
@@ -238,7 +239,7 @@
             },
             afterUpload(resp) {
                 let _this = this;
-                let video = process.env.VUE_APP_SERVER_FILE+'/static/file/'+resp.content.path;
+                let video = resp.content.path;
                 console.log(video);
 
                 _this.setion_video = video;

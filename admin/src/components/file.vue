@@ -1,10 +1,10 @@
 <template>
     <div>
         <button type="button" v-on:click="selectFile()" class="btn btn-white btn-default btn-round">
-            <i class="ace-icon fa fa-upload"></i>
+            <i class="fa fa-upload"></i>
             {{text}}
         </button>
-        <input class="hidden" type="file" ref="file" v-on:change="uploadFile()" v-bind:id="inputId+'-input'">
+        <input class="hidden" type="file" ref="file" v-on:change="upload_File()" v-bind:id="inputId+'-input'">
     </div>
 </template>
 
@@ -39,9 +39,9 @@
             return {}
         },
         methods: {
-            uploadFile() {
+            upload_File() {
                 let _this = this;
-                let formData = new window.FormData();
+
                 let file = _this.$refs.file.files[0];
 
 
@@ -119,7 +119,7 @@
                         if (!obj) {
                             param.shardIndex = 1;
                             console.log("没有找到文件记录，从分片1开始上传");
-                            _this.upload(param);
+                            _this.fileupload(param);
                         } else if (obj.shardIndex === obj.shardTotal) {
                             // 已上传分片 = 分片总数，说明已全部上传完，不需要再上传
                             Toast.success("文件极速秒传成功！");
@@ -128,7 +128,7 @@
                         } else {
                             param.shardIndex = obj.shardIndex + 1;
                             console.log("找到文件记录，从分片" + param.shardIndex + "开始上传");
-                            _this.upload(param);
+                            _this.fileupload(param);
                         }
                     } else {
                         Toast.warning("文件上传失败");
@@ -140,7 +140,7 @@
             /**
              * 将分片数据转成base64进行上传
              */
-            upload (param) {
+            fileupload (param) {
                 let _this = this;
                 let shardIndex = param.shardIndex;
                 let shardTotal = param.shardTotal;
@@ -163,7 +163,7 @@
                         if (shardIndex < shardTotal) {
                             // 上传下一个分片
                             param.shardIndex = param.shardIndex + 1;
-                            _this.upload(param);
+                            _this.fileupload(param);
                         } else {
                             Progress.hide();
                             _this.afterUpload(resp);
