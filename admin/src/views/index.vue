@@ -11,21 +11,15 @@
                             <span><img alt="image" class="img-circle" src="../../public/manager/img/profile_small.jpg" /></span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
-                               <span class="block m-t-xs"><strong class="font-bold">xinfeng</strong></span>
+                               <span class="block m-t-xs"><strong class="font-bold">{{loginUser.name}}</strong></span>
                                 <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
                                 </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a class="J_menuItem" href="form_avatar.html">修改头像</a>
                                 </li>
-                                <li><a class="J_menuItem" href="profile.html">个人资料</a>
-                                </li>
-                                <li><a class="J_menuItem" href="contacts.html">联系我们</a>
-                                </li>
-                                <li><a class="J_menuItem" href="mailbox.html">信箱</a>
-                                </li>
                                 <li class="divider"></li>
-                                <li><a href="login.html">安全退出</a>
+                                <li><a v-on:click="logout()">安全退出</a>
                                 </li>
                             </ul>
                         </div>
@@ -41,44 +35,53 @@
 
 
                     </li>
-                    <li>
+                    <li v-show="hasResource('01')">
                         <a href="#">
                             <i class="fa fa fa-bar-chart-o"></i>
                             <span class="nav-label">系统管理</span>
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level">
-                            <li>
-                                <a class="J_menuItem" href="index_v1.html" data-index="0">用户管理</a>
+                            <li v-show="hasResource('0101')">
+                                <router-link to="/system/user">
+                                    <span class="J_menuItem">用户管理</span>
+                                </router-link>
                             </li>
-                            <li>
-                                <a class="J_menuItem" href="index_v2.html">权限管理</a>
+                            <li v-show="hasResource('0102')">
+                                <router-link to="/system/resource">
+                                    <span class="J_menuItem">资源管理</span>
+                                </router-link>
+                            </li>
+                            <li v-show="hasResource('0103')">
+                                <router-link to="/system/role">
+                                    <span class="J_menuItem">角色管理</span>
+                                </router-link>
                             </li>
 
                         </ul>
 
                     </li>
-                    <li>
+                    <li v-show="hasResource('02')">
                         <a href="#">
                             <i class="fa fa-desktop"></i>
                             <span class="nav-label">业务管理</span>
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level">
-                            <li>
+                            <li  v-show="hasResource('0201')">
                                 <router-link to="/business/category">
                                     <span class="J_menuItem">分类管理</span>
                                 </router-link>
 
                             </li>
 
-                            <li>
+                            <li  v-show="hasResource('0202')">
                                 <router-link to="/business/course">
                                     <span class="J_menuItem">课程管理</span>
                                 </router-link>
 
                             </li>
-                            <li>
+                            <li  v-show="hasResource('0203')">
                                 <router-link to="/business/teacher">
                                     <span class="J_menuItem">教师管理</span>
                                 </router-link>
@@ -91,14 +94,14 @@
                         </ul>
 
                     </li>
-                    <li>
+                    <li v-show="hasResource('03')" >
                         <a href="#">
                             <i class="fa fa-desktop"></i>
                             <span class="nav-label">文件管理</span>
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level">
-                            <li>
+                            <li v-show="hasResource('0301')">
                                 <router-link to="/business/file">
                                     <span class="J_menuItem">文件管理</span>
                                 </router-link>
@@ -218,7 +221,65 @@
 <script>
     $("body").attr("class","fixed-sidebar full-height-layout gray-bg")
     export default {
-        name: "index"
+        name: "index",
+        data: function() {
+            return {
+                loginUser: {},
+            }
+        },
+        mounted: function() {
+            let _this = this;
+            _this.loginUser = Tool.getLoginUser();
+            console.log(Tool.getLoginUser());
+            if (!_this.hasResourceRouter(_this.$route.name)) {
+                _this.$router.push("/login");
+            }
+        },
+        methods: {
+            logout () {
+                let _this = this;
+                Loading.show();
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/user/logout/' + _this.loginUser.token).then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    if (resp.success) {
+                        Tool.setLoginUser(null);
+                        _this.$router.push("/login")
+                    } else {
+                        Toast.warning(resp.message)
+                    }
+                });
+            },
+            /**
+             * 查找是否有权限
+             * @param router
+             */
+            hasResourceRouter(router) {
+                let _this = this;
+                let resources = Tool.getLoginUser().resources;
+
+                if (Tool.isEmpty(resources)) {
+                    return false;
+                }
+
+                for (let i = 0; i < resources.length; i++) {
+                    console.log("router:"+router+"   resources:"+resources[i].page);
+                    if (router === resources[i].page) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            /**
+             * 查找是否有权限
+             * @param id
+             */
+            hasResource(id) {
+                return Tool.hasResource(id);
+            },
+
+        }
+
     }
 
 </script>

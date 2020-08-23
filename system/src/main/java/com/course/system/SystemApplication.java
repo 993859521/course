@@ -1,4 +1,4 @@
-package com.course.system.config;
+package com.course.system;
 
 
 import org.slf4j.Logger;
@@ -7,7 +7,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import tk.mybatis.spring.annotation.MapperScan;
+
 @SpringBootApplication
+@ComponentScan("com.course")
+@MapperScan("com.course.service.dto")
 
 public class SystemApplication {
 
