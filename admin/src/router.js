@@ -10,6 +10,9 @@ import Category from './views/admin/category.vue'
 import Teacher from './views/admin/teacher.vue'
 import File from './views/admin/file.vue'
 import Content from './views/admin/content.vue'
+import User from './views/admin/user.vue'
+import Role from './views/admin/role.vue'
+import Resource from './views/admin/resource.vue'
 
 Vue.use(Router)
 
@@ -26,6 +29,9 @@ export default new Router({
         path: "/",
         component: Index,
         name:"index",
+        meta: {
+            loginRequire: true
+        },
         children: [
             {
             path: "welcome",
@@ -34,38 +40,53 @@ export default new Router({
         },
             {
                 path: "business/chapter",
-                name: "chapter",
+                name: "business/chapter",
                 component: Chapter,
             },
             {
                 path: "business/course",
-                name: "course",
+                name: "business/course",
                 component: Course,
             },
             {
                 path: "business/section",
-                name: "section",
+                name: "business/section",
                 component: Section,
             },
             {
                 path: "business/category",
-                name: "category",
+                name: "business/category",
                 component: Category,
             },
             {
                 path: "business/teacher",
-                    name: "teacher",
+                name: "business/teacher",
                 component: Teacher,
             },
             {
                 path: "business/file",
-                name: "file",
+                name: "business/file",
                 component: File,
             },
             {
                 path: "business/content",
-                name: "content",
+                name: "business/content",
                 component: Content,
+            },
+            {
+                path: "system/user",
+                name: "system/user",
+                component: User,
+            },
+            {
+                path: "system/resource",
+                name: "system/resource",
+                component: Resource,
+            },
+            {
+                path: "system/role",
+                name: "system/role",
+                component: Role,
             },
 
 

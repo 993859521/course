@@ -1,10 +1,8 @@
-package com.course.service.config;
+package com.course.system.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
-
 import com.course.service.util.UuidUtil;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;

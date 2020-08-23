@@ -11,6 +11,12 @@ spring:
       discovery:
         locator:
           enabled: true
+      default-filters: LoginAdmin
+
+  redis:
+    host: 39.96.52.230
+    password: 657198
+    port: 6379
 management:
   endpoints:
     web:
@@ -19,3 +25,4 @@ management:
   endpoint:
     health:
       show-details: always
+
