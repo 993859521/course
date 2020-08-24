@@ -1,122 +1,122 @@
 <template>
-        <div class="ibox float-e-margins">
-            <div class="ibox-content">
-                <p>
-                    <button v-on:click="add()" class="btn btn-white btn-default btn-round">
-                        <i class="ace-icon fa fa-edit"></i>
-                        新增
-                    </button>
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <p>
+                <button v-on:click="add()" class="btn btn-white btn-default btn-round">
+                    <i class="ace-icon fa fa-edit"></i>
+                    新增
+                </button>
                 <button v-on:click="list(1)" class="btn btn-white btn-default btn-round">
                     <i class="ace-icon fa fa-refresh"></i>
                     刷新
                 </button>
             </p>
 
-                <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="8"></pagination>
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                                                <th>id</th>
-                        <th>登陆名</th>
-                        <th>昵称</th>
-                        <th>密码</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
+            <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="8"></pagination>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>登陆名</th>
+                    <th>昵称</th>
+                    <th>密码</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
 
-                    <tbody>
-                    <tr v-for="user in users">
-                        <td>{{user.id}}</td>
-                        <td>{{user.loginName}}</td>
-                        <td>{{user.name}}</td>
-                        <td>{{user.password}}</td>
-                        <td>
-                            <div class="btn-group">
-                                <button  v-on:click="editPassword(user)" class="btn btn-xs btn-info">
-                                    <i class="ace-icon fa fa-key bigger-120"></i>
-                                </button>&nbsp;
-                                <button v-on:click="edit( user)" class="btn btn-xs btn-info">
+                <tbody>
+                <tr v-for="user in users">
+                    <td>{{user.id}}</td>
+                    <td>{{user.loginName}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.password}}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button  v-on:click="editPassword(user)" class="btn btn-xs btn-info">
+                                <i class="ace-icon fa fa-key bigger-120"></i>
+                            </button>&nbsp;
+                            <button v-on:click="edit( user)" class="btn btn-xs btn-info">
                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                </button>&nbsp;
-                                <button v-on:click="del( user.id)" class="btn btn-xs btn-danger">
-                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                </button>
-                             </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">表单</h4>
-                            </div>
-                            <div class="modal-body">
-                                <form class="form-horizontal">
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">登陆名</label>
-                                                    <div class="col-sm-10">
-                                                        <input v-model="user.loginName" class="form-control" v-bind:disabled="user.id">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">昵称</label>
-                                                    <div class="col-sm-10">
-                                                        <input v-model="user.name" class="form-control" >
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label">密码</label>
-                                                    <div class="col-sm-10">
-                                                        <input v-model="user.password" class="form-control">
-                                                    </div>
-                                                </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                                <button v-on:click="save()" type="button" class="btn btn-primary">保存</button>
-                            </div>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
-                <div id="edit-password-modal" class="modal fade" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">修改密码</h4>
-                            </div>
-                            <div class="modal-body">
-                                <form class="form-horizontal">
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-2">密码</label>
-                                        <div class="col-sm-10">
-                                            <input class="form-control" type="password" v-model="user.password" name="password">
-                                        </div>
+                            </button>&nbsp;
+                            <button v-on:click="del( user.id)" class="btn btn-xs btn-danger">
+                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">表单</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">登陆名</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="user.loginName" class="form-control" v-bind:disabled="user.id">
                                     </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
-                                    <i class="ace-icon fa fa-times"></i>
-                                    取消
-                                </button>
-                                <button type="button" class="btn btn-white btn-info btn-round" v-on:click="savePassword()">
-                                    <i class="ace-icon fa fa-plus blue"></i>
-                                    保存密码
-                                </button>
-                            </div>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">昵称</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="user.name" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">密码</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="user.password" class="form-control">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button v-on:click="save()" type="button" class="btn btn-primary">保存</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+            <div id="edit-password-modal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">修改密码</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-2">密码</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="password" v-model="user.password" name="password">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+                                <i class="ace-icon fa fa-times"></i>
+                                取消
+                            </button>
+                            <button type="button" class="btn btn-white btn-info btn-round" v-on:click="savePassword()">
+                                <i class="ace-icon fa fa-plus blue"></i>
+                                保存密码
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
 
 
 
-            </div>
         </div>
+    </div>
 </template>
 
 <script>
@@ -126,8 +126,8 @@
         name: "business-User",
         data:function(){
             return{
-                 user:{},
-                 users:[],
+                user:{},
+                users:[],
             }
 
         },
@@ -196,7 +196,7 @@
                 _this.$ajax.post(process.env.VUE_APP_SERVER+'/system/admin/user/list',{
                         page: page,
                         size: _this.$refs.pagination.size,
-                }
+                    }
                 ).then((response)=>{
                     let resp = response.data.content;
                     _this. users=resp.list;
@@ -233,4 +233,3 @@
 
 <style scoped>
 
-</style>
