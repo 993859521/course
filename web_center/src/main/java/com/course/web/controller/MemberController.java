@@ -2,6 +2,7 @@ package com.course.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.course.service.domain.dto.*;
+import com.course.service.enums.SmsUseEnum;
 import org.springframework.data.redis.core.RedisTemplate;
 import com.course.service.service.MemberService;
 import com.course.service.util.UuidUtil;
@@ -61,6 +62,25 @@ public class MemberController {
          memberService.delete(id);
          return ResponseDto.builder().success(true).content(id).build();
     }
+    /**
+     * 保存，id有值时更新，无值时新增
+     */
+    @PostMapping("/register")
+    public ResponseDto register(@RequestBody MemberDto memberDto) {
+        // 保存校验
+        ValidatorUtil.require(memberDto.getMobile(), "手机号");
+        ValidatorUtil.length(memberDto.getMobile(), "手机号", 11, 11);
+        ValidatorUtil.require(memberDto.getPassword(), "密码");
+        ValidatorUtil.length(memberDto.getName(), "昵称", 1, 50);
+        ValidatorUtil.length(memberDto.getPhoto(), "头像url", 1, 200);
+        // 密码加密
+        memberDto.setPassword(DigestUtils.md5DigestAsHex(memberDto.getPassword().getBytes()));
+        ResponseDto responseDto = new ResponseDto();
+        memberService.save(memberDto);
+        responseDto.setContent(memberDto);
+        return responseDto;
+    }
+
     /**
      * 登录
      */
