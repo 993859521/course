@@ -17,8 +17,8 @@ public class VueGenerator {
         String module = MODULE;
 
 
-        String Domain = "User";
-        String tableName ="user";
+        String Domain = "MemberCourse";
+        String tableName ="member_course";
         String tableNameCn = DbUtil.getTableComment(tableName);
         String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
         System.out.println("表："+tableName);

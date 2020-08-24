@@ -51,17 +51,8 @@
                                 </a>
                             </li>
                             <li class="nav-item dropdown ">
-                                <a
-                                        class="nav-link dropdown-toggle"
-                                        href="#"
-                                        id="menu-2"
-                                        data-toggle="dropdown"
-                                        aria-haspopup="true"
-                                        aria-expanded="false"
-                                        data-display="static"
-                                >
-                                    全部课程
-                                </a>
+                                <router-link class="nav-link" to="/list">全部课程</router-link>
+
 
                             </li>
                             <li class="nav-item dropdown">
@@ -75,54 +66,27 @@
                                 >
                                     更多
                                 </a>
-                                <ul
-                                        class="dropdown-menu dropdown-menu-arrow dropdown-menu-right dropdown-menu-xl-left "
-                                        aria-labelledby="menu-3"
-                                >
+                                <ul class="dropdown-menu dropdown-menu-arrow dropdown-menu-right dropdown-menu-xl-left " aria-labelledby="menu-3">
                                     <li>
-                                        <a class="dropdown-item" href="./pages/blog.html">
-                                            Blog
-                                        </a>
+                                        <a class="dropdown-item" href="#">关于我们</a>
                                     </li>
                                     <li>
-                                        <a
-                                                class="dropdown-item"
-                                                href="./pages/blog-author.html"
-                                        >
-                                            Blog Author
-                                        </a>
+                                        <a class="dropdown-item" href="#">渠道合作</a>
                                     </li>
                                     <li>
-                                        <a
-                                                class="dropdown-item"
-                                                href="./pages/blog-category.html"
-                                        >
-                                            Blog Category
-                                        </a>
+                                        <div class="dropdown-divider"></div>
                                     </li>
                                     <li>
-                                        <a
-                                                class="dropdown-item"
-                                                href="./pages/blog-classic.html"
-                                        >
-                                            Blog Classic
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a
-                                                class="dropdown-item"
-                                                href="./pages/blog-single.html"
-                                        >
-                                            Blog Single
-                                        </a>
+                                        <a class="dropdown-item" href="#">更多信息</a>
                                     </li>
                                 </ul>
                             </li>
 
                         </ul>
                         <div class="header-btn ">
-                            <a v-on:click="openLoginModal()" class="btn btn-primary btn-sm">登录/注册</a
-                            >
+                            <span v-show="loginMember.id" class="text-white pr-3">您好：{{loginMember.name}}</span>
+                            <a v-show="loginMember.id" v-on:click="logout()" class="btn btn-primary btn-sm">退出登录</a>
+                            <a v-show="!loginMember.id" v-on:click="openLoginModal()" class="btn btn-primary btn-sm">登录/注册</a>
                         </div>
                     </div>
                 </nav>
@@ -141,6 +105,15 @@
     export default {
         name: "Header",
         components: {Login},
+        data: function () {
+            return {
+                loginMember: {}
+            }
+        },
+        mounted() {
+            let _this = this;
+            _this.loginMember = Tool.getLoginMember();
+        },
         methods: {
             /**
              * 打开登录注册窗口
@@ -148,6 +121,24 @@
             openLoginModal() {
                 let _this = this;
                 _this.$refs.loginComponent.openLoginModal();
+            },
+            setLoginMember(loginMember) {
+                let _this = this;
+                _this.loginMember = loginMember;
+            },
+            logout () {
+                let _this = this;
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/web/member/logout/' + _this.loginMember.token).then((response)=>{
+                    let resp = response.data;
+                    if (resp.success) {
+                        Tool.setLoginMember(null);
+                        _this.loginMember = {};
+                        Toast.success("退出登录成功");
+                        _this.$router.push("/");
+                    } else {
+                        Toast.warning(resp.message);
+                    }
+                });
             },
         }
     }

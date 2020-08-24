@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.*;
 
 public class ServerGenerator {
-    static String MODULE = "system";
+    static String MODULE = "web_center";
     static String toDtoPath = "service\\src\\main\\java\\com\\course\\service\\domain\\dto\\";
     static String toServicePath = "service\\src\\main\\java\\com\\course\\service\\service\\";
     static String toControllerPath = MODULE + "\\src\\main\\java\\com\\course\\" + MODULE + "\\controller\\";
@@ -19,8 +19,8 @@ public class ServerGenerator {
         String module = MODULE;
 
 
-        String Domain = "User";
-        String tableName = "user";
+        String Domain = "Member";
+        String tableName = "member";
         String tableNameCn = DbUtil.getTableComment(tableName);
         String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
         System.out.println("表："+tableName);

@@ -144,7 +144,7 @@
                     _this.sections = _this.course.sections || [];
 
                     // 获取报名信息
-                    //_this.getEnroll();
+                    _this.getEnroll();
 
                     // 将所有的节放入对应的章中
                     for (let i = 0; i < _this.chapters.length; i++) {
@@ -175,11 +175,64 @@
                 let _this = this;
                 _this.setion_video="";
                 if (section.charge === _this.SECTION_CHARGE.CHARGE.key ) {
-                    _this.setion_video=section.video;
+                    let loginMember = Tool.getLoginMember();
+                    if (Tool.isEmpty(loginMember)) {
+                        Toast.warning("请先登录");
+                        return;
+                    } else {
+                        if (Tool.isEmpty(_this.memberCourse)) {
+                            Toast.warning("请先报名");
+                            return;
+                        }
+                    }
                 }
                 $("#player-modal").modal("show");
                 console.log(section.title);
                 _this.setion_video=section.video;
+            },
+            /**
+             * 报名
+             */
+            enroll() {
+                let _this = this;
+                let loginMember = Tool.getLoginMember();
+                if (Tool.isEmpty(loginMember)) {
+                    Toast.warning("请先登录");
+                    return;
+                }
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/web/memberCourse/enroll', {
+                    courseId: _this.course.id,
+                    memberId: loginMember.id
+                }).then((response)=>{
+                    let resp = response.data;
+                    if (resp.success) {
+                        _this.memberCourse = resp.content;
+                        Toast.success("报名成功！");
+                    } else {
+                        Toast.warning(resp.message);
+                    }
+                });
+            },
+
+            /**
+             * 获取报名
+             */
+            getEnroll() {
+                let _this = this;
+                let loginMember = Tool.getLoginMember();
+                if (Tool.isEmpty(loginMember)) {
+                    console.log("未登录");
+                    return;
+                }
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/web/memberCourse/get-enroll', {
+                    courseId: _this.course.id,
+                    memberId: loginMember.id
+                }).then((response)=>{
+                    let resp = response.data;
+                    if (resp.success) {
+                        _this.memberCourse = resp.content || {};
+                    }
+                });
             },
 
         }

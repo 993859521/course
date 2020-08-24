@@ -175,10 +175,6 @@
                 let _this = this;
                 _this.MODAL_STATUS = _this.STATUS_REGISTER
             },
-            toForgetDiv() {
-                let _this = this;
-                _this.MODAL_STATUS = _this.STATUS_FORGET
-            },
 
             register() {
                 let _this = this;
@@ -186,7 +182,6 @@
                 // 提交之前，先校验所有输入框
                 // 注意：当有一个文本框校验为false时，其它不校验
                 let validateResult = _this.onRegisterMobileBlur() &&
-                    _this.onRegisterMobileCodeBlur() &&
                     _this.onRegisterNameBlur() &&
                     _this.onRegisterPasswordBlur() &&
                     _this.onRegisterConfirmPasswordBlur();
@@ -227,14 +222,14 @@
                         console.log("登录成功：", resp.content);
                         let loginMember = resp.content;
                         Tool.setLoginMember(resp.content);
-
+                            console.log(resp.content);
                         // 判断“记住我”
                         if (_this.remember) {
                             // 如果勾选记住我，则将用户名密码保存到本地缓存
                             // 这里保存密码密文，并保存密文md5，用于检测密码是否被重新输入过
                             let md5 = hex_md5(_this.member.password);
                             LocalStorage.set(LOCAL_KEY_REMEMBER_MEMBER, {
-                                mobile: loginMember.mobile,
+                                mobile: _this.member.mobile,
                                 password: _this.member.password,
                                 md5: md5
                             });
