@@ -1,5 +1,7 @@
 package com.course.service.service;
+import com.course.service.domain.dto.FileDto;
 import com.course.service.domain.entity.CourseContent;
+import com.course.service.domain.entity.File;
 import com.course.service.dto.CourseContentMapper;
 import com.course.service.domain.dto. Course_ContentDto;
 import com.course.service.domain.dto.PageDto;
@@ -52,15 +54,18 @@ List< Course_ContentDto>  course_ContentDtos = new ArrayList< Course_ContentDto>
             */
             public void save( Course_ContentDto  course_ContentDto){
              CourseContent  course_Content = CopyUtil.copy( course_ContentDto, CourseContent.class);
-             log.info("值:{}，id:{}",StringUtil.isEmpty(course_Content.getId()),course_Content.getId());
-            if(StringUtil.isEmpty(course_Content.getId())){
-                log.info(course_Content.toString());
+            log.info("course_Content:id{}",course_Content.getId());
+            Course_ContentDto course_contentDto = findByKey(course_ContentDto.getId());
+            if(course_contentDto == null){ ;
                 course_ContentMapper.insert(course_Content);
             }else{
              course_ContentMapper.updateByPrimaryKey(course_Content);
             }
             }
-
+            public Course_ContentDto findByKey(String key){
+                CourseContent courseContent = course_ContentMapper.selectOne(CourseContent.builder().id(key).build());
+                return CopyUtil.copy(courseContent, Course_ContentDto.class);
+            }
             /**
             * 删除数据
             * @param id

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.course.service.domain.entity.Chapter;
+import com.course.service.domain.entity.Section;
 import com.course.service.domain.entity.Teacher;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -84,6 +86,13 @@ public class CourseDto{
     private Date updatedAt;
 
     private List<Teacher> teacher;
+
+
+    private List<Chapter> chapters;
+
+    private List<Section> sections;
+
+    private String content;
 
 
 }

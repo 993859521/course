@@ -1,4 +1,4 @@
-package com.course.system.config;
+package com.course.service.config;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;

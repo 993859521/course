@@ -9,6 +9,7 @@
         <module>service</module>
         <module>business</module>
         <module>generator</module>
+        <module>web_center</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

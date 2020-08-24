@@ -19,8 +19,8 @@ public class ServerGenerator {
         String module = MODULE;
 
 
-        String Domain = "RoleResource";
-        String tableName = "role_resource";
+        String Domain = "User";
+        String tableName = "user";
         String tableNameCn = DbUtil.getTableComment(tableName);
         String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
         System.out.println("表："+tableName);

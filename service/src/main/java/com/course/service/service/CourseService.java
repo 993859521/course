@@ -1,12 +1,9 @@
 package com.course.service.service;
 
 import com.course.service.domain.dto.*;
-import com.course.service.domain.entity.Chapter;
-import com.course.service.domain.entity.Teacher;
-import com.course.service.dto.ChapterMapper;
-import com.course.service.dto.CourseMapper;
-import com.course.service.domain.entity.Course;
-import com.course.service.dto.MyCourseMapper;
+import com.course.service.domain.entity.*;
+import com.course.service.dto.*;
+import com.course.service.enums.CourseStatusEnum;
 import com.course.service.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -16,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 import com.course.service.util.UuidUtil;
 
@@ -35,7 +33,17 @@ public class CourseService {
     private final MyCourseMapper myCourseMapper;
     private final ChapterMapper chapterMapper;
     private final TeacherService teacherService;
-
+    private final CourseContentMapper courseContentMapper;
+    private final SectionMapper sectionMapper;
+    public List<CourseDto> listNew(PageDto pageDto) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        Example example = new Example(Course.class);
+        Example.Criteria criteria = example.createCriteria();
+        example.setOrderByClause("created_at desc");
+        criteria.andEqualTo("status",CourseStatusEnum.PUBLISH.getCode());
+        List<Course> courseList = courseMapper.selectByExample(example);
+        return CopyUtil.copyList(courseList, CourseDto.class);
+    }
     /**
      * 列表查询
      *
@@ -67,11 +75,20 @@ public class CourseService {
             courseDto.setTeacher(teachers);
             courseDtos.add(courseDto);
         }
-
         pageDto.setList(courseDtos);
         return pageDto;
     }
-
+    /**
+     * 列表查询：关联课程分类表
+     * @param pageDto
+     */
+    public void list(CoursePageDto pageDto) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        List<CourseDto> courseDtoList = myCourseMapper.list(pageDto);
+        PageInfo<CourseDto> pageInfo = new PageInfo<>(courseDtoList);
+        pageDto.setTotal(pageInfo.getTotal());
+        pageDto.setList(courseDtoList);
+    }
     public List<Chapter> chaopter_select(String CourseId) {
         List<Chapter> chapters = chapterMapper.select(Chapter.builder().courseId(CourseId).build());
         return chapters;
@@ -138,6 +155,46 @@ public class CourseService {
             myCourseMapper.moveSortsBackward(sortDto);
         }
     }
+    /**
+     * 查找某一课程，供web模块用，只能查已发布的
+     * @param id
+     * @return
+     */
+    public CourseDto findCourse(String id) {
+        Course course = courseMapper.selectByPrimaryKey(id);
+        if (course == null || !CourseStatusEnum.PUBLISH.getCode().equals(course.getStatus())) {
+            return null;
+        }
+        CourseDto courseDto = CopyUtil.copy(course, CourseDto.class);
 
+        // 查询内容
+        CourseContent content = courseContentMapper.selectByPrimaryKey(id);
+        if (content != null) {
+            courseDto.setContent(content.getContent());
+        }
+
+
+        // 查找章信息
+        List<Chapter> chapterList = chaopter_select(id);
+        courseDto.setChapters(chapterList);
+        List<Teacher> teachers = new ArrayList<Teacher>();
+        // 查找讲师信息
+        for (Chapter item :
+                chapterList) {
+            Teacher teacher = teacherService.selectAll(item.getTeacherId());
+            TeacherDto teacherDto= new TeacherDto();
+
+            if (!teachers.contains(teacher)) {
+                teachers.add(teacher);
+            }
+
+        }
+        courseDto.setTeacher(teachers);
+        // 查找节信息
+        List<Section> sectionList = sectionMapper.select(Section.builder().courseId(id).build());
+        courseDto.setSections(sectionList);
+
+        return courseDto;
+    }
 
 }

@@ -40,7 +40,6 @@ public class Course_ContentController {
     @PostMapping("/save")
     public ResponseDto save(@RequestBody Course_ContentDto  course_ContentDto){
         ValidatorUtil.require(course_ContentDto.getContent(), "课程内容");
-        ResponseDto responseDto = new ResponseDto();
         course_ContentService.save(course_ContentDto);
         return ResponseDto.builder().success(true).content( course_ContentDto).build();
     }

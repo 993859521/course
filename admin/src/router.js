@@ -34,10 +34,10 @@ export default new Router({
         },
         children: [
             {
-            path: "welcome",
-            name: "welcome",
-            component: Welcome,
-        },
+                path: "welcome",
+                name: "welcome",
+                component: Welcome,
+            },
             {
                 path: "business/chapter",
                 name: "business/chapter",
@@ -93,6 +93,6 @@ export default new Router({
 
         ],
 
-        },
+    },
     ]
 })
