@@ -142,7 +142,7 @@
                 }
 
                 Loading.show();
-                _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/member/save/', _this. member).then((response)=>{
+                _this.$ajax.post(process.env.VUE_APP_SERVER+'/web/member/save/', _this. member).then((response)=>{
                     Loading.hide();
                     let resp = response.data;
                     if (resp.success) {
@@ -162,7 +162,7 @@
                 let _this = this;
                 Confirm.show("删除大章后不可恢复，确认删除？", function () {
                     Loading.show();
-                    _this.$ajax.delete( process.env.VUE_APP_SERVER+'/business/admin/member/delete/' + id).then((response)=>{
+                    _this.$ajax.delete( process.env.VUE_APP_SERVER+'/web/member/delete/' + id).then((response)=>{
                         Loading.hide();
                         let resp = response.data;
                         if (resp.success) {
@@ -174,7 +174,7 @@
             },
             list(page){
                 let _this=this;
-                _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/member/list',{
+                _this.$ajax.post(process.env.VUE_APP_SERVER+'/web/member/list',{
                         page: page,
                         size: _this.$refs.pagination.size,
                 }

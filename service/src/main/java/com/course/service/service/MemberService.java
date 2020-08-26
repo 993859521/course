@@ -62,6 +62,7 @@ public class MemberService {
         if (StringUtil.isEmpty(member.getId())) {
             Date now = new Date();
             member.setId(UuidUtil.getShortUuid());
+            member.setRegisterTime(now);
             memberMapper.insert(member);
         } else {
             memberMapper.updateByPrimaryKey(member);

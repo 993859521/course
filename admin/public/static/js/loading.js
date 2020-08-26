@@ -1,14 +1,19 @@
 Loading = {
   show: function () {
     $.blockUI({
-      message: '<img src="/static/image/loading.gif" />',
+      message: '                             <div class="sk-spinner sk-spinner-double-bounce">\n' +
+          '                                <div class="sk-double-bounce1"></div>\n' +
+          '                                <div class="sk-double-bounce2"></div>\n' +
+          '                            </div> ',
       css: {
-        zIndex: "10011",
+        backgroundColor: "rgba(255,204,51, 0.5)",
         padding: "10px",
         left: "50%",
         width: "80px",
         marginLeft: "-40px",
+        border: 'none'
       }
+
     });
   },
   hide: function () {

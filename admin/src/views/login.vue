@@ -3,10 +3,10 @@
     <div>
       <div>
 
-        <h1 class="logo-name">H+</h1>
+        <h1 class="logo-name">mooc</h1>
 
       </div>
-      <h3>欢迎使用 H+</h3>
+      <h3>欢迎使用 IMooc</h3>
 
 
         <div class="form-group">
